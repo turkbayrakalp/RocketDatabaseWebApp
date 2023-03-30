@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}SpaceXhibit - Signup{% endblock %} 
+
+{% block content %} 
+<style>
+    body{
+        background-image:url(static/rocket_images/background.jpg);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+</style>
+    <form action="/signup" method="POST">
+        {{ form.csrf_token }}
+        <div class="field" style="margin: 90px 0px 0px 80px;">
+            <label for="username" class="form-label label-color" style="color:white;">Username:</label>    
+            <div class="control">
+                {{ form.username(required=True, class="form-control-lg")}}
+            </div>
+        </div>
+        <br>
+        <div class="field" style="margin: 0px 0px 0px 80px;">
+            <label for="password" class="form-label" style="color:white;">Password:</label>
+            <div class="control">
+                {{ form.password(required=True, class="form-control-lg")}}
+            </div>
+        </div>
+        <br>
+        <div class="field" style="margin: 0px 0px 0px 80px;">
+            <label for="superfan" class="form-label" style="color:white;">Are you a superfan of SpaceX?</label>
+            <div class="control" style="color:white;">
+                {{ form.superfan(required=True, class="form-control-lg list-style-none")}}
+            </div>
+        </div>
+        <div class="field" style="margin: 0px 0px 0px 80px;">
+            <div class="control" style="color:white;">
+                <input type="checkbox" name="wants_admin">
+                <label for="wants_admin" class="form-label" style="color:white;">I would like to be an admin.</label>
+            </div>
+        </div>
+        
+        <button type=submit class="btn btn-warning" style="margin: 10px 20px 20px 80px; color:white;">Sign up</button>
+    </form>
+
+{% endblock %}

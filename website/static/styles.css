@@ -1,0 +1,29 @@
+a.nav-item.nav-link, p.nav-item.nav-link {
+    color: black !important;
+}
+
+.pad-left {
+    padding-left: 3em !important;
+}
+
+tr.rocket-detail {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-color: lightgray;
+}
+
+td.rocket-detail {
+    text-align: right;
+}
+
+.detail-field {
+    display: inline;
+}
+
+div.detail-field {
+    float: right;
+}
+
+.list-style-none {
+    list-style: none;
+}

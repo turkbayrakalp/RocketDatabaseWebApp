@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}SpaceXhibit - Cores{% endblock %}
+
+{% block content %} <!-- This is the content block, whatever you include here will be visible on the screen -->
+<br/>
+<header>
+<h2> Cores </h2>
+<p>
+    These are the cores that are owned by SpaceX Rockets, you can search or browse the cores in our database!
+    {% if not current_user.is_admin %} Please <a href="/login">login</a> update, delete or add core data. {% endif %}
+</p>
+<header>
+            <button type="button" class="btn btn-warning btn" data-toggle="modal" data-target="#add-core-modal" style="position: fixed; bottom: 5em; right: 2.5em;">
+                New Core
+            </button>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#filter-core-modal" style="position: fixed; bottom: 2.5em; right: 2.5em;">
+                Filter Core
+            </button>
+<table class = "table table-hover table-sm">
+    <tr class = "table-active" style="text-align: center;">
+        <th>Serial</th>
+        <th>Status</th>
+        <th>Reuse Count</th>
+        <th>Block</th>
+        <th>Real Time Locating System Attempts</th>
+        <th>Real Time Locating System Landings</th>
+        <th>Autonomous Spaceport Drone Ship Attempts</th>
+        <th>Autonomous Spaceport Drone Ship Landings</th>
+        <th colspan="2">Edit</th>
+    </tr>
+    {% for core in cores %}
+    <tr class style="text-align: center;">
+        <td>
+            {{core["serial"]}}
+        </td>
+        <td>
+            {{core["status"]}}
+        </td>
+        <td>
+            {{core["reuse_count"]}}
+        </td>
+        <td>
+            {{core["block"]}}
+        </td>
+        <td>
+            {{core["rtls_attempts"]}}
+        </td>
+        <td>
+            {{core["rtls_landings"]}}
+        </td>
+        <td>
+            {{core["asds_attempts"]}}
+        </td>
+        <td>
+            {{core["asds_landings"]}}
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="delete_core('{{ core.core_id }}')">
+                Delete
+            </button>
+        </td>
+        <td>
+            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update-core-modal-{{ core.core_id }}">
+              Update
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Add new core -->
+<div class="modal fade" id="add-core-modal" tabindex="-1" role="dialog" aria-labelledby="add-core-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="core-modal-label"> Add Core </h5>
+        </div>
+        <div class="modal-body"><form action="/add_core" method="POST" style="display: grid;">
+          {{ core_form.csrf_token }}
+          <div class="field">
+              <label for="serial" class="form-label detail-field">Serial:</label>
+              <div class="control detail-field">
+                  {{ core_form.serial(class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="status" class="form-label detail-field">Status:</label>
+              <div class="control detail-field">
+                  {{ core_form.status(class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="reuse_count" class="form-label detail-field">Reuse Count:</label>
+              <div class="control detail-field">
+                  {{ core_form.reuse_count(class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+            <label for="block" class="form-label detail-field">Block:</label>
+            <div class="control detail-field">
+                {{ core_form.block(class="form-control-sm")}}
+            </div>
+        </div>
+          <div class="field">
+              <label for="rtls_attempts" class="form-label detail-field">Real Time Locating System Attempts:</label>
+              <div class="control detail-field">
+                  {{ core_form.rtls_attempts(class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="rtls_landings" class="form-label detail-field">Real Time Locating System Landings:</label>
+              <div class="control detail-field">
+                  {{ core_form.rtls_landings(class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="asds_attempts" class="form-label detail-field">Autonomous Spaceport Drone Ship Attempts:</label>
+              <div class="control detail-field">
+                  {{ core_form.asds_attempts(class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="asds_landings" class="form-label detail-field">Autonomous Spaceport Drone Ship Landings:</label>
+              <div class="control detail-field">
+                  {{ core_form.asds_landings(class="form-control-sm")}}
+              </div>
+          </div>
+  
+          <button type=submit class="btn btn-warning">Add</button>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ <!--Update table--> 
+ {% for core in cores %}
+    <div class="modal fade" id="update-core-modal-{{ core.core_id }}" tabindex="-1" role="dialog" aria-labelledby="update-core-modal-label-{{ core.core_id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="core-modal-label-{{ core.core_id }}"> Update {{ core.serial }} </h5>
+                </div>
+                <div class="modal-body"><form action="/update_core" method="POST" style="display: grid;">
+                    {{ core_form.csrf_token }}
+                    <div class="field" style="display: none">
+                        <div class="control">
+                            {{ core_form.core_id(value=core.core_id, class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="serial" class="form-label detail-field">Serial:</label>
+                        <div class="control detail-field">
+                            {{ core_form.serial(value=core.serial,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="status" class="form-label detail-field">Status:</label>
+                        <div class="control detail-field">
+                            {{ core_form.status(value=core.status,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="reuse_count" class="form-label detail-field">Reuse Count:</label>
+                        <div class="control detail-field">
+                            {{ core_form.reuse_count(value=core.reuse_count,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="block" class="form-label detail-field">Block:</label>
+                        <div class="control detail-field">
+                            {{ core_form.block(value=core.block,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="rtls_attempts" class="form-label detail-field">Real Time Locating System Attempts:</label>
+                        <div class="control detail-field">
+                            {{ core_form.rtls_attempts(value=core.rtls_attempts,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="rtls_landings" class="form-label detail-field">Real Time Locating System Landings:</label>
+                        <div class="control detail-field">
+                            {{ core_form.rtls_landings(value=core.rtls_landings,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="asds_attempts" class="form-label detail-field">Autonomous Spaceport Drone Ship Attempts:</label>
+                        <div class="control detail-field">
+                            {{ core_form.asds_attempts(value=core.asds_attempts,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="asds_landings" class="form-label detail-field">Autonomous Spaceport Drone Ship Landings:</label>
+                        <div class="control detail-field">
+                            {{ core_form.asds_landings(value=core.asds_landings,class="form-control-sm")}}
+                        </div>
+                    </div>
+                    <button type=submit class="btn btn-warning">Update</button>
+                </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+
+<!-- FILTER -->
+<div class="modal fade" id="filter-core-modal" tabindex="-1" aria-labelledby="filter-core-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filter-core-modal-label">Search</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"><form action="/filter_core" method="POST">
+                    <label for="fserial" class="form-label">Serial:</label>
+                    <input type="text" class="form-control" name="fserial"> 
+
+                    <label for="fstatus" class="form-label">Status:</label>
+                    <input type="text" class="form-control" name="fstatus">
+
+                    <label for="freuse_count" class="form-label">Reuse Count:</label>
+                    <input type="integer" class="form-control" name="freuse_count">
+
+                    <label for="fblock" class="form-label">Block:</label>
+                    <input type="integer" class="form-control" name="fblock">
+                    
+                    <label for="frtls_attempts" class="form-label">Real Time Locating System Attempts:</label>
+                    <input type="integer" class="form-control" name="frtls_attempts">
+
+                    <label for="frtls_landings" class="form-label">Real Time Locating System Landings:</label>
+                    <input type="integer" class="form-control" name="frtls_landings">
+
+                    <label for="fasds_attempts" class="form-label">Autonomous Spaceport Drone Ship Attempts:</label>
+                    <input type="integer" class="form-control" name="fasds_attempts">
+
+                    <label for="fasds_landings" class="form-label">Autonomous Spaceport Drone Ship Landings:</label>
+                    <input type="integer" class="form-control" name="fasds_landings">
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class = "btn btn-warning">Filter</button>
+                    </div>
+                </form>      
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

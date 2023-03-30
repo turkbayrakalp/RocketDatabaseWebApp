@@ -1,0 +1,32 @@
+# Week 9
+- Created SQLite3 database and imported our data
+    Seperated tables to conform to project requirements regarding "main tables"
+    Set data types for all columns
+    Set primary keys for all tables
+    Set a foriegn key and checked correctness using "PRAGMA FOREIGN_KEY_CHECK"
+- Created basic Flask app as a starting point
+
+# Week 11
+- Added insert functionality for payloads
+
+# Week 12
+- Seperated launches to create sixth main table
+- Added login/session functionality
+    Used Flask-Login
+    Created user database
+    Added password hashing
+- Added signup functionality
+    Added radio buttons and a checkbox
+- Refactored database operations as functions
+- Added CRUD for rocket details
+- Added CRUD for rockets (main)
+- Added separate CSS file to fulfil requirement
+- Added separate JS file to fulfil requirement
+    Wrote functions for rockets to redirect to deletion endpoints
+- Added file uploading and viewing and BLOB storage
+    Files stored as BLOB in SQLite3
+    Rocket image can be uploaded and viewed
+- Split launches.failures into separate time, altitude, and reason columns
+- Split launches.date into date and time
+- Added textarea to launches to fulfil requirement
+- Added validation to rocket insert and update operations

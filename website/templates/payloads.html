@@ -1,0 +1,299 @@
+{% extends "base.html" %} <!-- This file inherits base.html -->
+{% block title %}SpaceXhibit - Payloads{% endblock %} <!-- This is the Jinja syntax -->
+
+{% block content %} <!-- This is the content block, whatever you include here will be visible on the screen -->
+
+<br/>
+<h2> Payloads</h2>
+<p> 
+    These are the payloads that has been sent to space by SpaceX Rockets so far. If you see anything wrong or missing, feel free to amend.
+    {% if not current_user.is_admin %} Please <a href="/login">login</a> to update, delete or add payload data. {% endif %}
+
+</p>
+
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#add-payload-modal" style="position: fixed; bottom: 5em; right: 2.5em;">
+    New Payload
+</button>
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#filter-payload-modal" style="position: fixed; bottom: 2.5em; right: 2.5em;">
+    Search in Payloads
+</button>
+
+<table class = "table table-hover table-sm">
+    <thead>
+        <tr class = "table-active">
+            <th>Name</th>
+            <th>Type</th>
+            <th>Is Reused</th>
+            <th>Manufacturers</th>
+            <th>Mass (kg)</th>
+            <th>Mass (lb)</th>
+            <th>Orbit</th>
+            <th>Reference System</th>
+            <th>Regime</th>
+            <th colspan="2">Editing</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for payload in payloads %}
+        <tr class>
+            <td>
+                {{payload["name"]}}
+            </td>
+            <td>
+                {{payload["type"]}}
+            </td>
+            <td>
+                {{"No" if payload["reused"] == "False" else "Yes"}}
+            </td>
+            <td>
+                {{"-" if payload["manufacturers"] == None else payload["manufacturers"]}}
+            </td>
+            <td>
+                {{"-" if payload["mass_kg"] == None else payload["mass_kg"]}}
+            </td>
+            <td>
+                {{"-" if payload["mass_lb"] == None else payload["mass_lb"]}}
+            </td>
+            <td>
+                {{"-" if payload["orbit"] == None else payload["orbit"]}}
+            </td>
+            <td>
+                {{"-" if payload["reference_system"] == None else payload["reference_system"]}}
+            </td>
+            <td>
+                {{"-" if payload["regime"] == None else payload["regime"]}}
+            </td>
+            <td>
+                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update-payload-modal-{{ payload.payload_id }}">
+                  Update
+                </button>
+            </td>
+            <td>
+                {% if current_user.is_admin %}
+                  <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" 
+                  onclick="delete_payload('{{ payload.payload_id }}')">
+                    Delete
+                  </button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+                    
+        
+<!-- ADD PAYLOAD -->
+
+<div class="modal fade" id="add-payload-modal" tabindex="-1" role="dialog" aria-labelledby="add-payload-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-payload-modal-label">Add Payload</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"><form action="/add_payload" method="POST" style="display: grid;">
+                {{ formM.csrf_token }}
+                <div class="field">            
+                    <label for="name" class="form-label detail-field">Name:</label>
+                    <div class="control detail-field">
+                        {{ formM.name(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="type" class="form-label detail-field">Type:</label>
+                    <div class="control detail-field">
+                        {{ formM.type(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="reused" class="form-label detail-field">Reused?:</label>
+                    <div class="control detail-field">
+                        {{ formM.reused(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="manufacturers" class="form-label detail-field">Manufacturers:</label>
+                    <div class="control detail-field">
+                        {{ formM.manufacturers(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="mass_kg" class="form-label detail-field">Mass (kg):</label>
+                    <div class="control detail-field">
+                        {{ formM.mass_kg(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="mass_lb" class="form-label detail-field">Mass (lb):</label>
+                    <div class="control detail-field">
+                        {{ formM.mass_lb(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="orbit" class="form-label detail-field">Orbit:</label>
+                    <div class="control detail-field">
+                        {{ formM.orbit(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="reference_system" class="form-label detail-field">Reference System:</label>
+                    <div class="control detail-field">
+                        {{ formM.reference_system(class="form-control-sm")}}
+                    </div>
+                </div>
+                <div class="field">            
+                    <label for="regime" class="form-label detail-field">Regime:</label>
+                    <div class="control detail-field">
+                        {{ formM.regime(class="form-control-sm")}}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-warning">Add</button>
+            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- UPDATE ROCKET -->
+
+{% for payload in payloads %}
+
+<div class="modal fade" id="update-payload-modal-{{ payload.payload_id }}" tabindex="-1" role="dialog" aria-labelledby="update-payload-modal-label-{{ payload.payload_id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="payload-modal-label-{{ payload.payload_id }}"> Update {{ payload.name }} </h5>
+        </div>
+        <div class="modal-body"><form action="/update_payload" method="POST" style="display: grid;">
+          {{ formM.csrf_token }}
+          <div class="field" style="display: none">
+              <div class="control">
+                  {{ formM.payload_id(value=payload.payload_id, class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="name" class="form-label detail-field">Name:</label>
+              <div class="control detail-field">
+                  {{ formM.name(value=payload.name,class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="type" class="form-label detail-field">Type:</label>
+              <div class="control detail-field">
+                  {{ formM.type(value=payload.type,class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="reused" class="form-label detail-field">Reused?:</label>
+              <div class="control detail-field">
+                  <!-- {{ formM.reused(value=payload.reused,class="form-control-sm")}} -->
+                  <select class="form-control-sm" id="reused" name="reused" value="True">
+                    {% if payload.reused == "True" %}
+                      <option value="True" selected>Yes</option>
+                      <option value="False">No</option>
+                    {% else %}
+                    <option value="True">Yes</option>
+                    <option value="False" selected>No</option>
+                    {% endif %}
+                  </select>
+              </div>
+          </div>
+          <div class="field">
+              <label for="manufacturers" class="form-label detail-field">Manufacturers:</label>
+              <div class="control detail-field">
+                  {{ formM.manufacturers(value=payload.manufacturers,class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+              <label for="mass_kg" class="form-label detail-field">Mass (kg):</label>
+              <div class="control detail-field">
+                  {{ formM.mass_kg(value=payload.mass_kg,class="form-control-sm")}}
+              </div>
+          </div>
+          <div class="field">
+            <label for="mass_lb" class="form-label detail-field">Mass (lb):</label>
+            <div class="control detail-field">
+                {{ formM.mass_lb(value=payload.mass_lb,class="form-control-sm")}}
+            </div>
+        </div>
+        <div class="field">
+            <label for="orbit" class="form-label detail-field">Orbit:</label>
+            <div class="control detail-field">
+                {{ formM.orbit(value=payload.orbit,class="form-control-sm")}}
+            </div>
+        </div>
+        <div class="field">
+            <label for="reference_system" class="form-label detail-field">Reference System:</label>
+            <div class="control detail-field">
+                {{ formM.reference_system(value=payload.reference_system,class="form-control-sm")}}
+            </div>
+        </div>
+        <div class="field">
+            <label for="regime" class="form-label detail-field">Regime:</label>
+            <div class="control detail-field">
+                {{ formM.regime(value=payload.regime,class="form-control-sm")}}
+            </div>
+        </div>
+  
+          <button type=submit class="btn btn-warning">Update</button>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- FILTER PAYLOADS -->
+<div class="modal fade" id="filter-payload-modal" tabindex="-1" aria-labelledby="filter-payload-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filter-payload-modal-label">Search</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"><form action="/payloads_filtered" method="POST">
+                    <label for="fname" class="form-label">Name:</label>
+                    <input type="text" class="form-control" name="fname"> 
+
+                    <label for="ftype" class="form-label">Type:</label>
+                    <input type="text" class="form-control" name="ftype">
+
+                    <label for="freused" class="form-label">Reused:</label>
+                    <select class="form-select" name="freused" aria-label="Default Select">
+                        <option value=""> Any </option>
+                        <option value="True"> Yes </option>
+                        <option value="False"> No </option>                 
+                    </select>
+                    
+                    <label for="fmanufacturers" class="form-label">Manufacturers:</label>
+                    <input type="text" class="form-control" name="fmanufacturers">
+
+                    <label for="forbit" class="form-label">Orbit:</label>
+                    <input type="text" class="form-control" name="forbit">                 
+                    
+                    <label for="freference_system" class="form-label">Reference System:</label>
+                    <input type="text" class="form-control" name="freference_system">
+
+                    <label for="fregime" class="form-label">Regime:</label>
+                    <input type="text" class="form-control" name="fregime">                 
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class = "btn btn-warning">Search</button>
+                    </div>
+                </form>      
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- This endblock denotes the end of the content block, nothing should come after it-->
+{% endblock %}

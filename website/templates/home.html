@@ -1,0 +1,64 @@
+{% extends "base.html" %} <!-- This file inherits base.html --> 
+{% block title %}SpaceXhibit - Home{% endblock %} <!-- This is the Jinja syntax -->
+
+{% block content %} <!-- This is the content block, whatever you include here will be visible on the screen -->
+
+<br/>
+<h1 align = "center"> Welcome to SpaceXhibit™!</h1>
+<br/>
+
+<div class = "container">
+    <div class = "row">
+        <div class ="col">
+            <div class="card" style="width: 20rem;">
+                    <div class="card-body">
+                    <h5 class="card-title">Search</h5>
+                    <p class="card-text">You can make extensive searches about space missions conducted by SpaceX with our website!
+                        You can get information on: </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><ul><li>Launches</li></ul></li>
+                    <li class="list-group-item"><ul><li>Launchpads</li></ul></li>
+                    <li class="list-group-item"><ul><li>Rockets</li></ul></li>
+                    <li class="list-group-item"><ul><li>Ships</li></ul></li>
+                    <li class="list-group-item"><ul><li>Payloads</li></ul></li>
+                    <li class="list-group-item"><ul><li>Cores</li></ul></li>
+                    <li class="list-group-item"><ul><li>Capsules</li></ul></li>
+
+                    </ul>
+            </div>
+        </div>
+        <div class = "col">
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                <h5 class="card-title">Edit</h5>
+                <p class="card-text">You can change our database with the simple tools we provide you! 
+                    Here is a list of what you can do: </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item"><ul><li>Create entries</li></ul></li>
+                <li class="list-group-item"><ul><li>Update entries</li></ul></li>
+                <li class="list-group-item"><ul><li>Delete entries</li></ul></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class = "col">
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                <h5 class="card-title">Get Started</h5>
+                <p class="card-text">To get started, click one of the tabs on the navigation bar above, that's all!</p>
+                </div>
+            </div>
+            <br/>
+            <img src="static/rocket_images/rocket_icon.png" style="width: 22rem;">
+        </div>
+    </div>
+</div>
+
+        
+
+<!-- This endblock denotes the end of the content block, nothing should come after it-->
+{% endblock %}
+
+

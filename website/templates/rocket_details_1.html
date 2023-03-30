@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}SpaceXhibit - Rocket Details 1{% endblock %}
+
+{% block content %} <!-- This is the content block, whatever you include here will be visible on the screen -->
+
+<br/>
+<div class = "card"> 
+    <div class = "card body"> 
+        <h2 class = "card-title"> rocket_details_1 </h2>
+        <div class = "card-text" >
+            This is the rocket details 1 page, you can make searches or browse the rocket details in our database!
+            <a class="btn btn-primary" href="/rockets" role="button">Go Back Rockets</a>
+        </div>
+    </div>
+</div>
+<br/>
+
+<table class = "table table-hover table-sm">
+    <tr class = "table-active">
+        <th>Stage</th>
+        <th>Booster</th>
+        <th>Cost per Launch</th>
+        <th>Landing Legs Number</th>
+        <th>Landing Legs Material</th>
+        <th>Engine Specific Impulse Sea Level</th>
+        <th>Engine Specific Impulse Sea Vacuum</th>
+        <th>Engine Thrust Sea Level kN</th>
+        <th>Engine Thrust Sea Level lbf</th>
+        <th>Engine Thrust Vacuum kN</th>
+        <th>Engine Thrust lbf</th>
+        <th>Engine Number</th>
+        <th>Engine Type</th>
+        <th>Engine Version</th>
+        <th>Engine Layout</th>
+        <th>Engine Maximum Loss</th>
+        <th>Engine Propellant 1</th>
+        <th>Engine Propellant 2</th>
+        <th>Engine Thrust to Weight</th>
+    </tr>
+    {% for rocket_detail_1 in rocket_details_1 %}
+    <tr class>
+        <td>
+            {{rocket_details_1["stages"]}}
+        </td>
+        <td>
+            {{rocket_details_1["boosters"]}}
+        </td>
+        <td>
+            {{rocket_details_1["cost_per_launch"]}}
+        </td>
+        <td>
+            {{rocket_details_1["landing_legs_number"]}}
+        </td>
+        <td>
+            {{rocket_details_1["landing_legs_material"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_isp_sea_level"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_isp_vacuum"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_thrust_sea_level_kN"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_thrust_sea_level_lbf"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_thrust_vacuum_kN"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_thrust_lbf"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_number"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_type"]}}
+        </td>
+        <td>
+            {{ "-" if rocket_details_1["engine_version"] == None else rocket_details_1["engine_version"] }}
+        </td>
+        <td>
+            {{ "-" if rocket_details_1["engine_layout"] == None else rocket_details_1["engine_layout"] }}
+        </td>
+        <td>
+            {{ "-" if rocket_details_1["engine_loss_max"] == None else rocket_details_1["engine_loss_max"] }}
+        </td>
+        <td>
+            {{rocket_details_1["engine_propellant_1"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_propellant_2"]}}
+        </td>
+        <td>
+            {{rocket_details_1["engine_thrust_to_weight"]}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- This endblock denotes the end of the content block, nothing should come after it-->
+{% endblock %}

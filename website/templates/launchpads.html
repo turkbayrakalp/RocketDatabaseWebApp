@@ -1,0 +1,44 @@
+{% extends "base.html" %} <!-- This file inherits base.html --> 
+{% block title %}SpaceXhibit - Launchpads{% endblock %} <!-- This is the Jinja syntax -->
+
+{% block content %} <!-- This is the content block, whatever you include here will be visible on the screen -->
+
+<br/>
+<h2> Launchpads </h2>
+<p>
+    These are SpaceX's launchpads.
+</p>
+
+
+<table class = "table table-hover table-sm table-bordered">
+    <thead>
+        <tr class = "table-active">
+            <th>Name</th>
+            <th>Full Name</th>
+            <th>Status</th>
+            <th>Locality</th>
+            <th>Region</th>
+            <th>Timezone</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for launchpad in launchpads %}
+        <tr class>
+            <td> {{ launchpad["name"]}} </td>
+            <td> {{ launchpad["full_name"]}} </td>
+            <td> {{ launchpad["status"]}} </td>
+            <td> {{ launchpad["locality"]}} </td>
+            <td> {{ launchpad["region"]}} </td>
+            <td> {{ launchpad["timezone"]}} </td>
+            <td> {{ launchpad["latitude"]}} </td>
+            <td> {{ launchpad["longitude"]}} </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- This endblock denotes the end of the content block, nothing should come after it-->
+{% endblock %}
+

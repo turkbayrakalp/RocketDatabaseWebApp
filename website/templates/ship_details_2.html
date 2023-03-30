@@ -1,0 +1,49 @@
+{% extends "base.html" %} <!-- This file inherits base.html -->
+{% block title %}SpaceXhibit - ship_details_2{% endblock %} <!-- This is the Jinja syntax -->
+
+{% block content %} <!-- This is the content block, whatever you include here will be visible on the screen -->
+
+<br/>
+<div class = "card"> 
+    <div class = "card body"> 
+        <h2 class = "card-title"> ship_details_2 </h2>
+        <div class = "card-text" >
+            This is the ship_details_2 page, you can make searches or browse the ship_details_2 in our database!
+            <a class="btn btn-primary" href="/ships" role="button">Go Back Ships</a>
+        </div>
+    </div>
+</div>
+<br/>
+
+<table class = "table table-hover table-sm">
+    <tr class = "table-active">
+        <th>Class</th>
+        <th>Mass(kg)</th>
+        <th>Mass(lb)</th>
+        <th>Built Year</th>
+        <th>Home Port</th>
+    </tr>
+    {% for ship_detail_2 in ship_details_2 %}
+    <tr class>
+        <td>
+            {{ship_detail_2["class"]}}
+        </td>
+        <td>
+            {{"-" if ship_detail_2["mass_kg"] == None else ship_detail_2["mass_kg"]}}
+        </td>
+        <td>
+            {{"-" if ship_detail_2["mass_lb"] == None else ship_detail_2["mass_lb"]}}
+        </td>
+        <td>
+            {{"-" if ship_detail_2["year_built"] == None else ship_detail_2["year_built"]}}
+        </td>
+        <td>
+            {{ship_detail_2["home_port"]}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- This endblock denotes the end of the content block, nothing should come after it-->
+{% endblock %}
+

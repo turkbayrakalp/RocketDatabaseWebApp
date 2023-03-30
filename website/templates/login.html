@@ -1,0 +1,33 @@
+{% extends "base.html" %} <!-- This file inherits base.html --> 
+{% block title %}SpaceXhibit - Capsules{% endblock %} <!-- This is the Jinja syntax -->
+
+{% block content %}
+        <style>
+            body{
+                background-image:url(static/rocket_images/background.jpg);
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: cover;
+            }
+        </style>
+        <form action="/login" method="POST">
+            {{ form.csrf_token }}
+            <div class="field" style="margin: 90px 0px 0px 80px;">
+                <label for="username" class="form-label" style="color:white;">Username:</label>    
+                <div class="control">
+                    {{ form.username(required=True, class="form-control-lg")}}
+                </div>
+            </div>
+            <br>
+            <div class="field" style="margin: 0px 0px 0px 80px;">
+                <label for="password" class="form-label" style="color:white;">Password:</label>
+                <div class="control">
+                    {{ form.password(required=True, class="form-control-lg")}}
+                </div>
+            </div>
+            
+            <button type=submit class="btn btn-warning" style="margin: 20px 20px 20px 90px;">Log in</button>
+        </form>
+        <p style="margin-left: 90px; color:white;"> No account? <a href="/signup">Sign up!</a> </p>
+
+{% endblock %}
